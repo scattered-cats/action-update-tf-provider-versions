@@ -1,0 +1,18 @@
+# action.yml
+name: 'Update Terraform Provider Versions'
+description: 'Checks https://releases.hashicorp.com for latest provider versions & updates the repositories variables with the info'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+  # <var1> : helps limit the kind version to stable/nightly/alpha/etc
+  # <var2> : can try testing each var in a test deployment; output results to map()?
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.who-to-greet }}
