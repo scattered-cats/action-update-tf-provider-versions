@@ -2,17 +2,32 @@
 name: 'Update Terraform Provider Versions'
 description: 'Checks https://releases.hashicorp.com for latest provider versions & updates the repositories variables with the info'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  terraform-providers:  # id of input
+    description: 'Multi-line string of terraform providers to check'
     required: true
-    default: 'World'
+  gh-token:  # id of input
+    description: 'Use ${{ secrets.GITHUB_TOKEN }}'
+    required: true
+  scope:  # Scope in which to put the new variables
+    description: 'Valid options include ["repo","env"] '
+    required: false
+    default: 'repo'
+  target:  # id of input
+    description: 'Target Environment to put the Variables in'
+    required: false
+    default: 'Testing'
   # <var1> : helps limit the kind version to stable/nightly/alpha/etc
   # <var2> : can try testing each var in a test deployment; output results to map()?
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  LATEST_TFP_*: # id of output
+    description: 'This is a template for each terraform-provider version'
+  *_UPDATED: # id of output
+    description: 'This is a template for whether each terraform-provider was updated'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.terraform-providers }}
+    - ${{ inputs.gh-token }}
+    - ${{ inputs.scope }}
+    - ${{ inputs.target }}
